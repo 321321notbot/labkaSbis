@@ -1,77 +1,65 @@
 	.file	"labka1.c"
 	.intel_syntax noprefix
 	.text
-	.section	.rodata
+	.section	.rodata.str1.1,"aMS",@progbits,1
 .LC0:
 	.string	"Hello world!"
 .LC1:
 	.string	"%d"
 .LC2:
 	.string	"a[%d]=%d\n"
-	.text
+	.section	.text.startup,"ax",@progbits
 	.globl	main
 	.type	main, @function
 main:
-.LFB0:
+.LFB13:
 	.cfi_startproc
 	endbr64
 	push	rbp
 	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
-	mov	rbp, rsp
-	.cfi_def_cfa_register 6
-	sub	rsp, 64
-	mov	rax, QWORD PTR fs:40
-	mov	QWORD PTR -8[rbp], rax
-	xor	eax, eax
-	mov	DWORD PTR -60[rbp], 0
-	jmp	.L2
-.L3:
+	lea	rdi, .LC0[rip]
+	lea	rbp, .LC2[rip]
+	push	rbx
+	.cfi_def_cfa_offset 24
+	.cfi_offset 3, -24
+	xor	ebx, ebx
+	push	rcx
+	.cfi_def_cfa_offset 32
+	call	puts@PLT
 	lea	rdi, .LC0[rip]
 	call	puts@PLT
-	add	DWORD PTR -60[rbp], 1
-.L2:
-	cmp	DWORD PTR -60[rbp], 3
-	jle	.L3
-	mov	DWORD PTR -52[rbp], 100
-	add	DWORD PTR -52[rbp], 1
-	mov	eax, DWORD PTR -52[rbp]
-	mov	esi, eax
-	lea	rdi, .LC1[rip]
-	mov	eax, 0
-	call	printf@PLT
+	lea	rdi, .LC0[rip]
+	call	puts@PLT
+	lea	rdi, .LC0[rip]
+	call	puts@PLT
+	mov	edx, 101
+	lea	rsi, .LC1[rip]
+	xor	eax, eax
+	mov	edi, 1
+	call	__printf_chk@PLT
 	mov	edi, 10
 	call	putchar@PLT
-	mov	DWORD PTR -56[rbp], 0
-	jmp	.L4
-.L5:
-	mov	eax, DWORD PTR -56[rbp]
-	cdqe
-	mov	edx, DWORD PTR -56[rbp]
-	mov	DWORD PTR -48[rbp+rax*4], edx
-	mov	eax, DWORD PTR -56[rbp]
-	cdqe
-	mov	edx, DWORD PTR -48[rbp+rax*4]
-	mov	eax, DWORD PTR -56[rbp]
-	mov	esi, eax
-	lea	rdi, .LC2[rip]
-	mov	eax, 0
-	call	printf@PLT
-	add	DWORD PTR -56[rbp], 1
-.L4:
-	cmp	DWORD PTR -56[rbp], 9
-	jle	.L5
-	mov	eax, 0
-	mov	rcx, QWORD PTR -8[rbp]
-	xor	rcx, QWORD PTR fs:40
-	je	.L7
-	call	__stack_chk_fail@PLT
-.L7:
-	leave
-	.cfi_def_cfa 7, 8
+.L2:
+	mov	ecx, ebx
+	mov	edx, ebx
+	mov	rsi, rbp
+	mov	edi, 1
+	xor	eax, eax
+	inc	ebx
+	call	__printf_chk@PLT
+	cmp	ebx, 10
+	jne	.L2
+	pop	rdx
+	.cfi_def_cfa_offset 24
+	xor	eax, eax
+	pop	rbx
+	.cfi_def_cfa_offset 16
+	pop	rbp
+	.cfi_def_cfa_offset 8
 	ret
 	.cfi_endproc
-.LFE0:
+.LFE13:
 	.size	main, .-main
 	.ident	"GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0"
 	.section	.note.GNU-stack,"",@progbits
